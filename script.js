@@ -1,7 +1,3 @@
-function p(s) {
-  console.log(s);
-}
-
 function getRandom() {
   return Math.random();
 }
@@ -64,9 +60,40 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
-////////////////////////////////////////////////////////////////////////
+function getUserInput() {
+  let shape = "asdf";
+  while (true) {
+    shape = window.prompt("Rock / Paper / Scissors");
+    if (shape in shapes) break;
+  }
+}
 
-//TODO: handle wrong shape input, save computer choice, setup main()
-const playerSelection = "Rock";
-const computerSelection = getComputerChoice();
-p(playRound(playerSelection, computerSelection));
+function game() {
+  let wins = 0;
+  let ties = 0;
+  let losses = 0;
+  console.group("Round Results");
+  for (let i = 0; i < 5; i++) {
+    //const playerSelection = getUserInput();
+    const playerSelection = getComputerChoice();
+    const computerSelection = getComputerChoice();
+    roundResult = playRound(playerSelection, computerSelection);
+    switch (roundResult[4]) {
+      case "T":
+        ties++;
+        break;
+      case "L":
+        losses++;
+        break;
+      case "W":
+        wins++;
+        break;
+    }
+    console.log(roundResult);
+  }
+  console.groupEnd();
+  console.log(`Your score (W-L-T): ${wins}-${losses}-${ties}`);
+}
+
+////////////////////////////////////////////////////////////////////////
+game();
