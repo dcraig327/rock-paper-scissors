@@ -27,7 +27,7 @@ function getComputerChoice() {
   return getKeyByValue(shapes, getRandomChoice(3));
 }
 
-function gameRound(playerSelection, computerSelection) {
+function playRound(playerSelection, computerSelection) {
   /*
     0: rock
     1: paper
@@ -51,15 +51,15 @@ function gameRound(playerSelection, computerSelection) {
 
   switch (player - computer) {
     case 0:
-      p(`You Tie! ${playerSelection} matches ${computerSelection}`);
+      return `You Tie! ${playerSelection} matches ${computerSelection}`;
       break;
     case 2:
     case -1:
-      p(`You Lose! ${computerSelection} beats ${playerSelection}`);
+      return `You Lose! ${computerSelection} beats ${playerSelection}`;
       break;
     case 1:
     case -2:
-      p(`You Win! ${playerSelection} beats ${computerSelection}`);
+      return `You Win! ${playerSelection} beats ${computerSelection}`;
       break;
   }
 }
@@ -67,4 +67,6 @@ function gameRound(playerSelection, computerSelection) {
 ////////////////////////////////////////////////////////////////////////
 
 //TODO: handle wrong shape input, save computer choice, setup main()
-gameRound("Rock", getComputerChoice());
+const playerSelection = "Rock";
+const computerSelection = getComputerChoice();
+p(playRound(playerSelection, computerSelection));
