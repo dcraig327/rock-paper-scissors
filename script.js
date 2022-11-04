@@ -68,10 +68,24 @@ function getUserInput() {
   }
 }
 
+function createButton(name) {
+  let btn = document.createElement("button");
+  btn.textContent = name;
+  document.body.appendChild(btn);
+  return btn;
+}
+
 function game() {
   let wins = 0;
   let ties = 0;
   let losses = 0;
+
+  //create 3 buttons for each selection
+  createButton("Rock");
+  createButton("Paper");
+  createButton("Scissors");
+
+  //add event listener that call playRound with correct playerSelection
 
   console.log(`Your score (W-L-T): ${wins}-${losses}-${ties}`);
 }
