@@ -68,11 +68,15 @@ function getUserInput() {
   }
 }
 
-function createButton(name) {
+function playerButtonCallback(event) {
+  let r = playRound(this.textContent.toLowerCase(), getComputerChoice());
+  console.log(r);
+}
+function createPlayerButton(name) {
   let btn = document.createElement("button");
   btn.textContent = name;
+  btn.addEventListener("click", playerButtonCallback);
   document.body.appendChild(btn);
-  return btn;
 }
 
 function game() {
@@ -81,9 +85,9 @@ function game() {
   let losses = 0;
 
   //create 3 buttons for each selection
-  createButton("Rock");
-  createButton("Paper");
-  createButton("Scissors");
+  createPlayerButton("Rock");
+  createPlayerButton("Paper");
+  createPlayerButton("Scissors");
 
   //add event listener that call playRound with correct playerSelection
 
