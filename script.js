@@ -69,8 +69,9 @@ function getUserInput() {
 }
 
 function playerButtonCallback(event) {
-  let r = playRound(this.textContent.toLowerCase(), getComputerChoice());
-  console.log(r);
+  updateRoundDetails(
+    playRound(this.textContent.toLowerCase(), getComputerChoice())
+  );
 }
 function createPlayerButton(name) {
   let btn = document.createElement("button");
@@ -79,19 +80,43 @@ function createPlayerButton(name) {
   document.body.appendChild(btn);
 }
 
+function createScoreboard() {
+  let div = document.createElement("div");
+  div.id = "scoreboard";
+  div.textContent = "Score (W-L-T): 0-0-0";
+  document.body.appendChild(div);
+}
+function updateScoreboard(wins, losses, ties) {
+  let div = document.querySelector("#scoreboard");
+  div.textContent = `Score (W-L-T): ${wins}-${losses}-${ties}`;
+}
+
+function createRoundDetails() {
+  let div = document.createElement("div");
+  div.id = "round-details";
+  document.body.appendChild(div);
+}
+function updateRoundDetails(outcome) {
+  let div = document.querySelector("#round-details");
+  let p = document.createElement("p");
+  p.textContent = `${outcome}`;
+  div.appendChild(p);
+}
+
 function game() {
   let wins = 0;
   let ties = 0;
   let losses = 0;
 
   //create 3 buttons for each selection
+  createScoreboard();
   createPlayerButton("Rock");
   createPlayerButton("Paper");
   createPlayerButton("Scissors");
+  createRoundDetails();
 
+  updateScoreboard(wins, losses, ties);
   //add event listener that call playRound with correct playerSelection
-
-  console.log(`Your score (W-L-T): ${wins}-${losses}-${ties}`);
 }
 
 ////////////////////////////////////////////////////////////////////////
