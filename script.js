@@ -1,3 +1,8 @@
+let wins;
+let losses;
+let ties;
+let playing;
+
 function getRandom() {
   return Math.random();
 }
@@ -68,55 +73,113 @@ function getUserInput() {
   }
 }
 
-function playerButtonCallback(event) {
-  updateRoundDetails(
-    playRound(this.textContent.toLowerCase(), getComputerChoice())
-  );
-}
 function createPlayerButton(name) {
   let btn = document.createElement("button");
   btn.textContent = name;
   btn.addEventListener("click", playerButtonCallback);
   document.body.appendChild(btn);
 }
-
+function createRoundDetails() {
+  let div = document.createElement("div");
+  document.body.appendChild(div);
+  let p = document.createElement("p");
+  p.id = "round-details";
+  div.appendChild(p);
+}
 function createScoreboard() {
   let div = document.createElement("div");
   div.id = "scoreboard";
-  div.textContent = "Score (W-L-T): 0-0-0";
   document.body.appendChild(div);
+  updateScoreboard();
 }
-function updateScoreboard(wins, losses, ties) {
+
+function updateScoreboard() {
   let div = document.querySelector("#scoreboard");
   div.textContent = `Score (W-L-T): ${wins}-${losses}-${ties}`;
 }
-
-function createRoundDetails() {
-  let div = document.createElement("div");
-  div.id = "round-details";
-  document.body.appendChild(div);
-}
 function updateRoundDetails(outcome) {
-  let div = document.querySelector("#round-details");
-  let p = document.createElement("p");
-  p.textContent = `${outcome}`;
-  div.appendChild(p);
+  let p = document.querySelector("#round-details");
+  let text = document.createTextNode(`${outcome}`);
+  if (p.hasChildNodes()) {
+    let br = document.createElement("br");
+    p.appendChild(br);
+  }
+  p.appendChild(text);
+}
+
+function updateScore(result) {
+  switch (result) {
+    case "W":
+      wins++;
+      break;
+    case "L":
+      losses++;
+      break;
+    case "T":
+      ties++;
+      break;
+  }
+}
+
+function playerButtonCallback(event) {
+  if (!playing) {
+    resetGame();
+  }
+  let ret = playRound(this.textContent.toLowerCase(), getComputerChoice());
+  let result = ret[4];
+  updateRoundDetails(ret);
+  updateScore(result);
+  updateScoreboard();
+  if (checkPlayerWon()) {
+    endGame("YOU ARE THE CHAMPION!");
+  } else if (checkPlayerLost()) {
+    endGame("YOU ARE THE CHUMPSON!");
+  }
+}
+
+function resetGame() {
+  wins = 0;
+  ties = 0;
+  losses = 0;
+  playing = true;
+  //if roundDetails, clear it
+  let p = document.querySelector("#round-details");
+  if (p) {
+    while (p.firstChild) {
+      p.removeChild(p.firstChild);
+    }
+  }
+}
+
+function endGame(resultMessage) {
+  playing = false;
+  let p = document.querySelector("#round-details");
+  let gameOver = document.createElement("h3");
+  gameOver.textContent = "Series Over";
+  p.appendChild(gameOver);
+  let result = document.createElement("h3");
+  result.textContent = resultMessage;
+  p.appendChild(result);
+}
+
+function checkPlayerWon() {
+  if (wins == 5) {
+    return true;
+  }
+}
+function checkPlayerLost() {
+  if (losses == 5) {
+    return true;
+  }
 }
 
 function game() {
-  let wins = 0;
-  let ties = 0;
-  let losses = 0;
-
-  //create 3 buttons for each selection
-  createScoreboard();
+  resetGame();
   createPlayerButton("Rock");
   createPlayerButton("Paper");
   createPlayerButton("Scissors");
+  createScoreboard();
   createRoundDetails();
-
-  updateScoreboard(wins, losses, ties);
-  //add event listener that call playRound with correct playerSelection
 }
 
 ////////////////////////////////////////////////////////////////////////
